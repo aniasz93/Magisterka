@@ -13,13 +13,13 @@ public class LoginPage {
 	}
 	
 	@FindBy(id="username")
-	private WebElement usernameField;
+	public WebElement usernameField;
 	
 	@FindBy(id="password")
-	private WebElement passwordField;
+	public WebElement passwordField;
 	
 	@FindBy(xpath="//button[@class='btn btn-primary']")
-	private WebElement loginButton;
+	public WebElement loginButton;
 	
 	@FindBy(id="errorMessage")
 	public WebElement errorMessageLabel;

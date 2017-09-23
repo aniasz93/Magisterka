@@ -44,6 +44,13 @@ public class WhenUserLogin {
 		Assert.assertTrue(loginPage.errorMessageLabel.isDisplayed());
 	}
 	
+	@Test
+	public void loginWithoutCredentials() {
+		loginPage.loginUser("", "");
+		
+		Assert.assertTrue(!loginPage.loginButton.isEnabled());
+	}
+	
 	@After
 	public void closeTheBrowser() {
 		loginPage.close();
