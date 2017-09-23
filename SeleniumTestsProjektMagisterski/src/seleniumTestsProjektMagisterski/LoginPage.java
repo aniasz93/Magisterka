@@ -3,6 +3,7 @@ package seleniumTestsProjektMagisterski;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class LoginPage {
 
@@ -11,21 +12,17 @@ public class LoginPage {
 		this.webdriver = webdriver;
 	}
 	
-	public WebElement getUsernameField() {
-		return webdriver.findElement(By.id("username"));
-	}
+	@FindBy(id="username")
+	private WebElement usernameField;
 	
-	public WebElement getPasswordField() {
-		return webdriver.findElement(By.id("password"));
-	}
+	@FindBy(id="password")
+	private WebElement passwordField;
 	
-	public WebElement clickLoginButton() {
-		return webdriver.findElement(By.xpath("//button[@class='btn btn-primary']"));
-	}
+	@FindBy(xpath="//button[@class='btn btn-primary']")
+	private WebElement loginButton;
 	
-	public String getCurrentUrl() {
-		return webdriver.getCurrentUrl();
-	}
+	@FindBy(id="errorMessage")
+	public WebElement errorMessageLabel;
 	
 	public void open(String url) {
 		webdriver.get(url);
@@ -36,8 +33,8 @@ public class LoginPage {
 	}
 	
 	public void loginUser(String username, String password) {
-		this.getUsernameField().sendKeys(username);
-		this.getPasswordField().sendKeys(password);
-		this.clickLoginButton().submit();
+		this.usernameField.sendKeys(username);
+		this.passwordField.sendKeys(password);
+		this.loginButton.submit();
 	}
 }
