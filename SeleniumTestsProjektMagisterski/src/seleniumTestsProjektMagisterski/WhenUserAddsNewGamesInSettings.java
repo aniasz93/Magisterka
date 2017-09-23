@@ -10,18 +10,14 @@ import org.openqa.selenium.support.PageFactory;
 import junit.framework.Assert;
 import seleniumTestsProjektMagisterski.Pages.DashboardsPage;
 import seleniumTestsProjektMagisterski.Pages.LoginPage;
+import seleniumTestsProjektMagisterski.Pages.SettingsPage;
 
-public class WhenUserLogin {
+public class WhenUserAddsNewGamesInSettings {
 
 	private WebDriver webdriver;
-	private LoginPage login;
+	private SettingsPage settings = new SettingsPage(webdriver);
+	private LoginPage login = new LoginPage(webdriver);
 	private DashboardsPage dashboards = new DashboardsPage(webdriver);
-	
-//	public WhenUserLogIn(WebDriver webdriver, String url) {
-//		this.webdriver = webdriver;
-//		this.loginPage = new LoginPage(this.webdriver);
-//		this.url = url;
-//	}
 	
 	@Before
 	public void openTheBrowser() {
@@ -32,37 +28,12 @@ public class WhenUserLogin {
 	}
 	
 	@Test
-	public void loginValidUser() {
+	public void addNewGameProperly() {
 		login.loginUser("admin", "admin");
-		
-		Assert.assertEquals(dashboards.getProperUrl(), webdriver.getCurrentUrl());
-		System.out.println(webdriver.getCurrentUrl());
-	}
-	
-	@Test
-	public void loginInvalidUser() {
-		login.loginUser("test", "test");
-		
-		Assert.assertTrue(login.errorMessageLabel.isDisplayed());
-	}
-	
-	@Test
-	public void loginWithoutCredentials() {
-		Assert.assertTrue(!login.loginButton.isEnabled());
-	}
-	
-	@Test
-	public void loginOnlyWithUsername() {
-		login.loginUser("admin", "");
-		
-		Assert.assertTrue(!login.loginButton.isEnabled());
-	}
-	
-	@Test
-	public void loginOnlyWithPassword() {
-		login.loginUser("", "admin");
-		
-		Assert.assertTrue(!login.loginButton.isEnabled());
+		dashboards.findTab("settings()");
+		settings.getNewGameButton().click();
+
+		System.out.println("yo:D");
 	}
 	
 	@After
