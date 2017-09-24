@@ -15,7 +15,7 @@ public class DashboardsPage {
 		return "http://localhost:8080/login#!/dashboards";
 	}
 	
-	public void findTab(String tab) {
-		webdriver.findElement(By.cssSelector("[ng-click='settings()']"));
+	public WebElement findTab(String tab) {
+		return webdriver.findElement(By.cssSelector("button[ng-click='" + tab + "']"));
 	}
 }

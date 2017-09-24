@@ -3,6 +3,7 @@ package seleniumTestsProjektMagisterski;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -24,16 +25,22 @@ public class WhenUserAddsNewGamesInSettings {
 		System.setProperty("webdriver.chrome.driver", "D:\\Uczelnia\\UAM\\Magisterka\\Projekt magisterski\\chromedriver_win32\\chromedriver.exe");
 		webdriver = new ChromeDriver();
 		login = PageFactory.initElements(webdriver, LoginPage.class);
+		dashboards = PageFactory.initElements(webdriver, DashboardsPage.class);
+		settings = PageFactory.initElements(webdriver, SettingsPage.class);
 		login.open(login.getProperUrl());
 	}
 	
 	@Test
 	public void addNewGameProperly() {
 		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()");
+		dashboards.findTab("settings()").click();
 		settings.getNewGameButton().click();
-
-		System.out.println("yo:D");
+		settings.getNewGameNameField().sendKeys("Training Game");
+		settings.getNewGameDescriptionField().sendKeys("This is first game for training");
+		settings.getSaveNewGameButton().click();
+		int a = settings.getGamesTable().size();
+//		Assert.assertTrue(condition);
+		System.out.println(a);
 	}
 	
 	@After
