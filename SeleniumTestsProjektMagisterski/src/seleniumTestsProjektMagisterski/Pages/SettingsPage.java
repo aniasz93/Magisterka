@@ -51,7 +51,7 @@ public class SettingsPage {
 	public List<WebElement> getGamesTable() {
 		//return webdriver.findElements(By.cssSelector("div[ng-init='$settings.list()']"));
 		
-		return webdriver.findElements(By.xpath("div[ng-init='$settings.list()']/table"));//starts-with(@id, 'accordiongroup-') and ends-with(@id, '-panel')]/div/div[2]/div[1]/table/"));//"//div[@ng-init='$settings.list()']"));
+		return webdriver.findElements(By.cssSelector("div[ng-init='$settings.list()'] > table > tbody > tr"));//starts-with(@id, 'accordiongroup-') and ends-with(@id, '-panel')]/div/div[2]/div[1]/table/"));//"//div[@ng-init='$settings.list()']"));
 	}
 	//*[@id="accordiongroup-7-3933-panel"]/div/div[2]/div[1]/table
 	
