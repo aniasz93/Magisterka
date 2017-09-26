@@ -1,10 +1,14 @@
 package seleniumTestsProjektMagisterski;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 
@@ -32,15 +36,57 @@ public class WhenUserAddsNewGamesInSettings {
 	
 	@Test
 	public void addNewGameProperly() {
+		int gamesNumb = 0;
+		int newGamesNumb = 0;
+		List<WebElement> gamesList;
+		String gameName = "xxx";
+		String gameDescription = "yyy";
+		
 		login.loginUser("admin", "admin");
 		dashboards.findTab("settings()").click();
+		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		gamesNumb = settings.getGamesTable().size();
+		
 		settings.getNewGameButton().click();
-		settings.getNewGameNameField().sendKeys("Training Game");
-		settings.getNewGameDescriptionField().sendKeys("This is first game for training");
+		settings.getNewGameNameField().sendKeys(gameName);
+		settings.getNewGameDescriptionField().sendKeys(gameDescription);
 		settings.getSaveNewGameButton().click();
-		int a = settings.getGamesTable().size();
-//		Assert.assertTrue(condition);
-		System.out.println(a);
+
+		Assert.assertTrue(settings.getSuccessfulGameSavingMessage().isDisplayed());
+		
+		webdriver.navigate().refresh();
+		gamesList = settings.getGamesTable();
+		newGamesNumb = gamesList.size();
+		
+		Assert.assertEquals(newGamesNumb, gamesNumb + 1);
+		Assert.assertEquals(settings.getLastGame(gamesList).getText(), gameName + " " + gameDescription);
+	}
+	
+	@Test
+	public void addEmptyGame() {
+		int gamesNumb = 0;
+		int newGamesNumb = 0;
+		List<WebElement> gamesList;
+		String gameName = "";
+		String gameDescription = "";
+		
+		login.loginUser("admin", "admin");
+		dashboards.findTab("settings()").click();
+		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		gamesNumb = settings.getGamesTable().size();
+		
+		settings.getNewGameButton().click();
+		settings.getNewGameNameField().sendKeys(gameName);
+		settings.getNewGameDescriptionField().sendKeys(gameDescription);
+		settings.getSaveNewGameButton().click();
+
+		Assert.assertTrue(settings.cannotSaveNewGameLabel.isDisplayed());
+		
+		webdriver.navigate().refresh();
+		gamesList = settings.getGamesTable();
+		newGamesNumb = gamesList.size();
+		
+		Assert.assertEquals(newGamesNumb, gamesNumb);
 	}
 	
 	@After

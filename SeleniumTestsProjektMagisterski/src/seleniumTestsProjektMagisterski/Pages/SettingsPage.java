@@ -19,17 +19,20 @@ public class SettingsPage {
 		return "http://localhost:8080/login#!/settings";
 	}
 	
-//	@FindBy(cssSelector="button[ng-click='$settings.addGamePopover.open()']")
-	public WebElement getNewGameButton() {
-		return webdriver.findElement(By.cssSelector("button[ng-click='$settings.addGamePopover.open()']"));
-	}
-	
-	public WebElement getNewCategoryButton() {
-		return webdriver.findElement(By.cssSelector("button[ng-click='$settings.addCategoryPopover.open()']"));
-	}
-	
 	public WebElement findTab(String tab) {
 		return webdriver.findElement(By.cssSelector("button[ng-click='" + tab + "']"));
+	}
+	
+	public List<WebElement> getGamesTable() {		
+		return webdriver.findElements(By.cssSelector("div[ng-init='$settings.list()'] > table > tbody > tr"));//starts-with(@id, 'accordiongroup-') and ends-with(@id, '-panel')]/div/div[2]/div[1]/table/"));//"//div[@ng-init='$settings.list()']"));
+	}
+	
+	public WebElement getLastGame(List<WebElement> gamesList) {
+		return gamesList.get(gamesList.size() - 1);
+	}
+	
+	public WebElement getNewGameButton() {
+		return webdriver.findElement(By.cssSelector("button[ng-click='$settings.addGamePopover.open()']"));
 	}
 	
 	public WebElement getNewGameNameField() {
@@ -48,12 +51,17 @@ public class SettingsPage {
 		return webdriver.findElement(By.cssSelector("button[ng-click='$settings.create(); $settings.addGamePopover.close()']"));
 	}
 	
-	public List<WebElement> getGamesTable() {
-		//return webdriver.findElements(By.cssSelector("div[ng-init='$settings.list()']"));
-		
-		return webdriver.findElements(By.cssSelector("div[ng-init='$settings.list()'] > table > tbody > tr"));//starts-with(@id, 'accordiongroup-') and ends-with(@id, '-panel')]/div/div[2]/div[1]/table/"));//"//div[@ng-init='$settings.list()']"));
+	public WebElement getSuccessfulGameSavingMessage() {
+		return webdriver.findElement(By.cssSelector("div[ng-if='$settings.gameCreated'] > div"));
 	}
-	//*[@id="accordiongroup-7-3933-panel"]/div/div[2]/div[1]/table
+	
+	public List<WebElement> getCategoriesTable() {		
+		return webdriver.findElements(By.cssSelector("div[ng-init='$settings.listCategories()'] > table > tbody > tr"));
+	}
+	
+	public WebElement getNewCategoryButton() {
+		return webdriver.findElement(By.cssSelector("button[ng-click='$settings.addCategoryPopover.open()']"));
+	}
 	
 	public WebElement getNewCategoryNameField() {
 		return webdriver.findElement(By.cssSelector("input[ng-model='$settings.categoryName']"));
@@ -70,4 +78,14 @@ public class SettingsPage {
 	public WebElement getSaveNewCategoryButton() {
 		return webdriver.findElement(By.cssSelector("button[ng-click='$settings.createCategory(); $settings.addCategoryPopover.close()']"));
 	}
+	
+	public WebElement getSuccessfulCategorySavingMessage() {
+		return webdriver.findElement(By.cssSelector("div[ng-if='$settings.categoryCreated'] > div"));
+	}
+	
+	@FindBy(id="cannotSaveNewGameMessage")
+	public WebElement cannotSaveNewGameLabel;
+	
+	@FindBy(id="cannotSaveNewCategoryMessage")
+	public WebElement cannotSaveNewCategoryLabel;
 }
