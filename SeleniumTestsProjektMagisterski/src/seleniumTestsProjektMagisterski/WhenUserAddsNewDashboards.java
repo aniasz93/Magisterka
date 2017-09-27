@@ -1,5 +1,8 @@
 package seleniumTestsProjektMagisterski;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -13,25 +16,28 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
 import junit.framework.Assert;
 import seleniumTestsProjektMagisterski.Pages.DashboardsPage;
 import seleniumTestsProjektMagisterski.Pages.LoginPage;
 import seleniumTestsProjektMagisterski.Pages.SettingsPage;
 
-public class WhenUserAddsNewGamesInSettings {
+public class WhenUserAddsNewDashboards {
 
 	private WebDriver webdriver;
 	public String browser = "Chrome";
-	private SettingsPage settings = new SettingsPage(webdriver);
 	private LoginPage login = new LoginPage(webdriver);
 	private DashboardsPage dashboards = new DashboardsPage(webdriver);
+	private SettingsPage settings = new SettingsPage(webdriver);
 
-	int gamesNumb;
-	int newGamesNumb;
-	List<WebElement> gamesList;
-	String gameName;
-	String gameDescription;
+	String dashboardName = "Training";
+	Select select;
+	int dashboardsNumb;
+	int newDashboardsNumb;
+	List<WebElement> dashboardsList;
+	WebElement dashboardGame;
+	WebElement dashboardCategory;
 	
 	@Before
 	public void openTheBrowser() {
@@ -50,61 +56,43 @@ public class WhenUserAddsNewGamesInSettings {
 		
 		login = PageFactory.initElements(webdriver, LoginPage.class);
 		dashboards = PageFactory.initElements(webdriver, DashboardsPage.class);
-		settings = PageFactory.initElements(webdriver, SettingsPage.class);
 		login.open(login.getProperUrl());
 	}
 	
 	@Test
-	public void addNewGameProperly() {
-		gamesNumb = 0;
-		newGamesNumb = 0;
-		gameName = "xxx";
-		gameDescription = "yyy";
+	public void AddNewDashboardProperly() {
 		
 		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()").click();
-		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		gamesNumb = settings.getGamesTable().size();
+		dashboards.getNewDashboardButton().click();
+		dashboards.getNewDashboardNameField().sendKeys(dashboardName);
 		
-		settings.getNewGameButton().click();
-		settings.getNewGameNameField().sendKeys(gameName);
-		settings.getNewGameDescriptionField().sendKeys(gameDescription);
-		settings.getSaveNewGameButton().click();
 
-		Assert.assertTrue(settings.getSuccessfulGameSavingMessage().isDisplayed());
+		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+		dashboardsNumb = dashboards.getDashboardsTable().size();
+		
+		select = new Select(dashboards.getNewGameDropdown);
+		//select.deselectAll();
+		select.selectByIndex(1);
+		String selectedGame = select.getFirstSelectedOption().getText();
+		
+		select = new Select(dashboards.getNewCategoryDropdown);
+		//select.deselectAll();
+		select.selectByIndex(1);
+		String selectedCategory = select.getFirstSelectedOption().getText();
+		dashboards.getSaveNewCategoryButton().click();
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		Date date = new Date();
+		String dateStr = dateFormat.format(date);
+		
+		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
 		
 		webdriver.navigate().refresh();
-		gamesList = settings.getGamesTable();
-		newGamesNumb = gamesList.size();
+		dashboardsList = dashboards.getDashboardsTable();
+		newDashboardsNumb = dashboardsList.size();
 		
-		Assert.assertEquals(newGamesNumb, gamesNumb + 1);
-		Assert.assertEquals(settings.getLastGame(gamesList).getText(), gameName + " " + gameDescription);
-	}
-	
-	@Test
-	public void addEmptyGame() {
-		gamesNumb = 0;
-		newGamesNumb = 0;
-		gameName = "";
-		gameDescription = "";
-		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()").click();
-		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		gamesNumb = settings.getGamesTable().size();
-		
-		settings.getNewGameButton().click();
-		settings.getNewGameNameField().sendKeys(gameName);
-		settings.getNewGameDescriptionField().sendKeys(gameDescription);
-		settings.getSaveNewGameButton().click();
-
-		Assert.assertTrue(settings.cannotSaveNewGameLabel.isDisplayed());
-		
-		webdriver.navigate().refresh();
-		gamesList = settings.getGamesTable();
-		newGamesNumb = gamesList.size();
-		
-		Assert.assertEquals(newGamesNumb, gamesNumb);
+		Assert.assertEquals(newDashboardsNumb, dashboardsNumb + 1);
+		Assert.assertEquals(dashboards.getFirstDashboard(dashboardsList).getText(), dashboardName + " " + selectedGame + " " + selectedCategory + " " + dateStr + "0");
 	}
 	
 	@After

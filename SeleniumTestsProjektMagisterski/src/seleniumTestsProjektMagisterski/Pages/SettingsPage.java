@@ -24,11 +24,11 @@ public class SettingsPage {
 	}
 	
 	public List<WebElement> getGamesTable() {		
-		return webdriver.findElements(By.cssSelector("div[ng-init='$settings.list()'] > table > tbody > tr"));//starts-with(@id, 'accordiongroup-') and ends-with(@id, '-panel')]/div/div[2]/div[1]/table/"));//"//div[@ng-init='$settings.list()']"));
+		return webdriver.findElements(By.cssSelector("div[ng-init='$settings.list()'] > table > tbody > tr"));
 	}
 	
-	public WebElement getLastGame(List<WebElement> gamesList) {
-		return gamesList.get(gamesList.size() - 1);
+	public WebElement getLastGame(List<WebElement> list) {
+		return list.get(list.size() - 1);
 	}
 	
 	public WebElement getNewGameButton() {

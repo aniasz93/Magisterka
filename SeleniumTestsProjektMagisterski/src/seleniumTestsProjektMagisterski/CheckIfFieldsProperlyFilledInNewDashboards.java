@@ -12,7 +12,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 
 import junit.framework.Assert;
@@ -20,20 +19,20 @@ import seleniumTestsProjektMagisterski.Pages.DashboardsPage;
 import seleniumTestsProjektMagisterski.Pages.LoginPage;
 import seleniumTestsProjektMagisterski.Pages.SettingsPage;
 
-public class WhenUserAddsNewCategoriesInSettings {
+public class CheckIfFieldsProperlyFilledInNewDashboards {
 
 	private WebDriver webdriver;
 	public String browser = "Chrome";
-	private SettingsPage settings = new SettingsPage(webdriver);
 	private LoginPage login = new LoginPage(webdriver);
 	private DashboardsPage dashboards = new DashboardsPage(webdriver);
+	private SettingsPage settings = new SettingsPage(webdriver);
 	
-
-	int categoriesNumb;
-	int newCategoriesNumb;
-	String categoryName;
-	String categoryDescription;
+	List<WebElement> gamesList;
+	List<WebElement> gamesListFromSettings;
+	List<WebElement> gamesListInDashboards;
 	List<WebElement> categoriesList;
+	List<WebElement> categoriesListFromSettings;
+	List<WebElement> categoriesListInDashboards;
 	
 	@Before
 	public void openTheBrowser() {
@@ -57,66 +56,44 @@ public class WhenUserAddsNewCategoriesInSettings {
 	}
 	
 	@Test
-	public void addNewGategoryProperly() {
-		categoriesNumb = 0;
-		newCategoriesNumb = 0;
-		categoryName = "Category the first";
-		categoryDescription = "Category description is what it is";
+	public void gameDropdown() {
 		
 		login.loginUser("admin", "admin");
 		dashboards.findTab("settings()").click();
 		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
 		
-		((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollIntoView();", settings.getNewCategoryButton());
+		gamesList = settings.getGamesTable();
 
+		gamesListFromSettings = settings.getGamesTable();
+		
+		settings.findTab("dashboards()").click();
 		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-		categoriesNumb = settings.getCategoriesTable().size();
-
 		
-		settings.getNewCategoryButton().click();
-		settings.getNewCategoryNameField().sendKeys(categoryName);
-		settings.getNewCategoryDescriptionField().sendKeys(categoryDescription);
-		settings.getSaveNewCategoryButton().click();
+		dashboards.getNewDashboardButton().click();
+		gamesListInDashboards = dashboards.getGamesListInDropdown();
 		
-		Assert.assertTrue(settings.getSuccessfulCategorySavingMessage().isDisplayed());
-		
-		webdriver.navigate().refresh();
-		categoriesList = settings.getCategoriesTable();
-		newCategoriesNumb = categoriesList.size();
-		
-		Assert.assertEquals(newCategoriesNumb, categoriesNumb + 1);
-		Assert.assertEquals(settings.getLastGame(categoriesList).getText(), categoryName + " " + categoryDescription);
+		Assert.assertTrue(gamesListInDashboards.containsAll(gamesListFromSettings));
 	}
 	
 	@Test
-	public void addEmptyCategory() {
-		categoriesNumb = 0;
-		newCategoriesNumb = 0;
-		categoryName = "";
-		categoryDescription = "";
-		
+	public void categoryDropdown() {
+
 		login.loginUser("admin", "admin");
 		dashboards.findTab("settings()").click();
 		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
 		
-		((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollIntoView();", settings.getNewCategoryButton());
+		categoriesList = settings.getCategoriesTable();
 
+		((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollIntoView();", settings.getSaveNewCategoryButton());
+		categoriesListFromSettings = settings.getCategoriesTable();
+		
+		settings.findTab("dashboards()").click();
 		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
 		
-		categoriesNumb = settings.getGamesTable().size();
+		dashboards.getNewDashboardButton().click();
+		categoriesListInDashboards = dashboards.getCategoriesListInDropdown();
 		
-		settings.getNewGameButton().click();
-		settings.getNewGameNameField().sendKeys(categoryName);
-		settings.getNewGameDescriptionField().sendKeys(categoryDescription);
-		settings.getSaveNewGameButton().click();
-
-		Assert.assertTrue(settings.cannotSaveNewCategoryLabel.isDisplayed());
-		
-		webdriver.navigate().refresh();
-		categoriesList = settings.getGamesTable();
-		newCategoriesNumb = categoriesList.size();
-		
-		Assert.assertEquals(newCategoriesNumb, categoriesNumb);
+		Assert.assertTrue(categoriesListInDashboards.containsAll(categoriesListFromSettings));
 	}
 	
 	@After
