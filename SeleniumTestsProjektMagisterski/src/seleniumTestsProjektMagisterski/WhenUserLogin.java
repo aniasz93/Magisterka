@@ -25,7 +25,7 @@ import seleniumTestsProjektMagisterski.Pages.LoginPage;
 public class WhenUserLogin {
 
 	private WebDriver webdriver;
-	public String browser = "firefox";
+	public String browser = "chrome";
 	private LoginPage login;
 	private DashboardsPage dashboards = new DashboardsPage(webdriver);
 	
@@ -53,16 +53,22 @@ public class WhenUserLogin {
 	
 	@Test
 	public void loginValidUser() {
-		login.loginUser("admin", "admin");
-		
+		try {
+			login.loginUser("admin", "admin");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertEquals(dashboards.getProperUrl(), webdriver.getCurrentUrl());
 		System.out.println(webdriver.getCurrentUrl());
 	}
 	
 	@Test
 	public void loginInvalidUser() {
-		login.loginUser("test", "test");
-		
+		try {
+			login.loginUser("test", "test");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(login.errorMessageLabel.isDisplayed());
 	}
 	
@@ -73,15 +79,21 @@ public class WhenUserLogin {
 	
 	@Test
 	public void loginOnlyWithUsername() {
-		login.loginUser("admin", "");
-		
+		try {
+			login.loginUser("admin", "");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(!login.loginButton.isEnabled());
 	}
 	
 	@Test
 	public void loginOnlyWithPassword() {
-		login.loginUser("", "admin");
-		
+		try {
+			login.loginUser("", "admin");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(!login.loginButton.isEnabled());
 	}
 	

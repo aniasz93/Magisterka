@@ -65,24 +65,30 @@ public class WhenUserAddsNewPlayers {
 		playerNick = "BiPi";
 		playerAge = "60";
 		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("players()").click();
-		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		playersNumb = players.getPlayersTable().size();
-		
-		players.getNewPlayerButton().click();
-		players.getPlayerFirstNameField().sendKeys(playerFirst);
-		players.getPlayerLastNameField().sendKeys(playerLast);
-		players.getPlayerNicknameField().sendKeys(playerNick);
-		players.getPlayerAgeField().sendKeys(playerAge);
-		players.getSaveNewPlayerButton().click();
-
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("players()").click();
+			Thread.sleep(500);
+			playersNumb = players.getPlayersTable().size();
+			
+			players.getNewPlayerButton().click();
+			players.getPlayerFirstNameField().sendKeys(playerFirst);
+			players.getPlayerLastNameField().sendKeys(playerLast);
+			players.getPlayerNicknameField().sendKeys(playerNick);
+			players.getPlayerAgeField().sendKeys(playerAge);
+			players.getSaveNewPlayerButton().click();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(players.getSuccessfulPlayerSavingMessage().isDisplayed());
 		
-		webdriver.navigate().refresh();
-		playersList = players.getPlayersTable();
-		newPlayersNumb = playersList.size();
-		
+		try {
+			webdriver.navigate().refresh();
+			playersList = players.getPlayersTable();
+			newPlayersNumb = playersList.size();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertEquals(newPlayersNumb, playersNumb + 1);
 		Assert.assertEquals(players.getLastPlayer(playersList).getText(), playerFirst + " " + playerLast + " " + playerNick + " " + playerAge);
 	}
@@ -93,24 +99,33 @@ public class WhenUserAddsNewPlayers {
 		newPlayersNumb = 0;
 		playerNick = "BiPi";
 		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("players()").click();
-		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		playersNumb = players.getPlayersTable().size();
-		
-		players.getNewPlayerButton().click();
-		players.getPlayerNicknameField().sendKeys(playerNick);
-
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("players()").click();
+			Thread.sleep(500);
+			playersNumb = players.getPlayersTable().size();
+			
+			players.getNewPlayerButton().click();
+			players.getPlayerNicknameField().sendKeys(playerNick);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(players.getSaveNewPlayerButton().isEnabled());
 		
-		players.getSaveNewPlayerButton().click();
-
+		try {
+			players.getSaveNewPlayerButton().click();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(players.getSuccessfulPlayerSavingMessage().isDisplayed());
 		
-		webdriver.navigate().refresh();
-		playersList = players.getPlayersTable();
-		newPlayersNumb = playersList.size();
-		
+		try {
+			webdriver.navigate().refresh();
+			playersList = players.getPlayersTable();
+			newPlayersNumb = playersList.size();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertEquals(newPlayersNumb, playersNumb + 1);
 		Assert.assertEquals(players.getLastPlayer(playersList).getText(), " " + " " + playerNick + " ");
 	}
@@ -120,20 +135,26 @@ public class WhenUserAddsNewPlayers {
 		playersNumb = 0;
 		newPlayersNumb = 0;
 		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("players()").click();
-		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		playersNumb = players.getPlayersTable().size();
-		
-		players.getNewPlayerButton().click();
-		players.getSaveNewPlayerButton().click();
-
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("players()").click();
+			Thread.sleep(500);
+			playersNumb = players.getPlayersTable().size();
+			
+			players.getNewPlayerButton().click();
+			players.getSaveNewPlayerButton().click();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(players.cannotSaveNewPlayerLabel.isDisplayed());
 		
-		webdriver.navigate().refresh();
-		playersList = players.getPlayersTable();
-		newPlayersNumb = playersList.size();
-		
+		try {
+			webdriver.navigate().refresh();
+			playersList = players.getPlayersTable();
+			newPlayersNumb = playersList.size();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertEquals(newPlayersNumb, playersNumb);
 	}
 	

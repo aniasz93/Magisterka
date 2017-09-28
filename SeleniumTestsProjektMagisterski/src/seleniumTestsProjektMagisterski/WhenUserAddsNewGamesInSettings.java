@@ -61,22 +61,30 @@ public class WhenUserAddsNewGamesInSettings {
 		gameName = "xxx";
 		gameDescription = "yyy";
 		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()").click();
-		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		gamesNumb = settings.getGamesTable().size();
-		
-		settings.getNewGameButton().click();
-		settings.getNewGameNameField().sendKeys(gameName);
-		settings.getNewGameDescriptionField().sendKeys(gameDescription);
-		settings.getSaveNewGameButton().click();
-
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("settings()").click();
+			Thread.sleep(500);
+			gamesNumb = settings.getGamesTable().size();
+			
+			settings.getNewGameButton().click();
+			settings.getNewGameNameField().sendKeys(gameName);
+			settings.getNewGameDescriptionField().sendKeys(gameDescription);
+			settings.getSaveNewGameButton().click();
+			Thread.sleep(500);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(settings.getSuccessfulGameSavingMessage().isDisplayed());
 		
-		webdriver.navigate().refresh();
-		gamesList = settings.getGamesTable();
-		newGamesNumb = gamesList.size();
-		
+		try {
+			webdriver.navigate().refresh();
+			gamesList = settings.getGamesTable();
+			Thread.sleep(500);
+			newGamesNumb = gamesList.size();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertEquals(newGamesNumb, gamesNumb + 1);
 		Assert.assertEquals(settings.getLastGame(gamesList).getText(), gameName + " " + gameDescription);
 	}
@@ -88,22 +96,28 @@ public class WhenUserAddsNewGamesInSettings {
 		gameName = "";
 		gameDescription = "";
 		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()").click();
-		webdriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		gamesNumb = settings.getGamesTable().size();
-		
-		settings.getNewGameButton().click();
-		settings.getNewGameNameField().sendKeys(gameName);
-		settings.getNewGameDescriptionField().sendKeys(gameDescription);
-		settings.getSaveNewGameButton().click();
-
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("settings()").click();
+			Thread.sleep(500);
+			gamesNumb = settings.getGamesTable().size();
+			
+			settings.getNewGameButton().click();
+			settings.getNewGameNameField().sendKeys(gameName);
+			settings.getNewGameDescriptionField().sendKeys(gameDescription);
+			settings.getSaveNewGameButton().click();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(settings.cannotSaveNewGameLabel.isDisplayed());
 		
-		webdriver.navigate().refresh();
-		gamesList = settings.getGamesTable();
-		newGamesNumb = gamesList.size();
-		
+		try {
+			webdriver.navigate().refresh();
+			gamesList = settings.getGamesTable();
+			newGamesNumb = gamesList.size();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertEquals(newGamesNumb, gamesNumb);
 	}
 	

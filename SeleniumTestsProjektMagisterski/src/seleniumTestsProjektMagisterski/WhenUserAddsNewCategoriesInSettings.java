@@ -57,32 +57,39 @@ public class WhenUserAddsNewCategoriesInSettings {
 	}
 	
 	@Test
-	public void addNewGategoryProperly() {
+	public void addNewCategoryProperly() {
 		categoriesNumb = 0;
 		newCategoriesNumb = 0;
 		categoryName = "Category the first";
 		categoryDescription = "Category description is what it is";
 		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()").click();
-		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-		
-		((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollIntoView();", settings.getNewCategoryButton());
-
-		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-		categoriesNumb = settings.getCategoriesTable().size();
-
-		
-		settings.getNewCategoryButton().click();
-		settings.getNewCategoryNameField().sendKeys(categoryName);
-		settings.getNewCategoryDescriptionField().sendKeys(categoryDescription);
-		settings.getSaveNewCategoryButton().click();
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("settings()").click();
+			Thread.sleep(500);
+			
+			((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollHeight;", settings.getNewCategoryButton());
+	
+			Thread.sleep(500);
+			categoriesNumb = settings.getCategoriesTable().size();
+	
+			settings.getNewCategoryButton().click();
+			settings.getNewCategoryNameField().sendKeys(categoryName);
+			settings.getNewCategoryDescriptionField().sendKeys(categoryDescription);
+			settings.getSaveNewCategoryButton().click();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		
 		Assert.assertTrue(settings.getSuccessfulCategorySavingMessage().isDisplayed());
-		
-		webdriver.navigate().refresh();
-		categoriesList = settings.getCategoriesTable();
-		newCategoriesNumb = categoriesList.size();
+		try {
+			Thread.sleep(500);
+			webdriver.navigate().refresh();
+			categoriesList = settings.getCategoriesTable();
+			newCategoriesNumb = categoriesList.size();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		
 		Assert.assertEquals(newCategoriesNumb, categoriesNumb + 1);
 		Assert.assertEquals(settings.getLastGame(categoriesList).getText(), categoryName + " " + categoryDescription);
@@ -95,27 +102,34 @@ public class WhenUserAddsNewCategoriesInSettings {
 		categoryName = "";
 		categoryDescription = "";
 		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()").click();
-		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("settings()").click();
+			Thread.sleep(500);
+			
+			((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollHeight;", settings.getNewCategoryButton());
+	
+			Thread.sleep(500);
+			
+			categoriesNumb = settings.getGamesTable().size();
+			
+			settings.getNewGameButton().click();
+			settings.getNewGameNameField().sendKeys(categoryName);
+			settings.getNewGameDescriptionField().sendKeys(categoryDescription);
+			settings.getSaveNewGameButton().click();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		
-		((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollIntoView();", settings.getNewCategoryButton());
-
-		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-		
-		categoriesNumb = settings.getGamesTable().size();
-		
-		settings.getNewGameButton().click();
-		settings.getNewGameNameField().sendKeys(categoryName);
-		settings.getNewGameDescriptionField().sendKeys(categoryDescription);
-		settings.getSaveNewGameButton().click();
-
 		Assert.assertTrue(settings.cannotSaveNewCategoryLabel.isDisplayed());
 		
-		webdriver.navigate().refresh();
-		categoriesList = settings.getGamesTable();
-		newCategoriesNumb = categoriesList.size();
-		
+		try {
+			webdriver.navigate().refresh();
+			categoriesList = settings.getGamesTable();
+			newCategoriesNumb = categoriesList.size();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertEquals(newCategoriesNumb, categoriesNumb);
 	}
 	

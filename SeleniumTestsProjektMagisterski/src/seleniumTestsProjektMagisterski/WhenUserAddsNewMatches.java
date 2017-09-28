@@ -1,15 +1,12 @@
 package seleniumTestsProjektMagisterski;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -18,29 +15,21 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
-import junit.framework.Assert;
 import seleniumTestsProjektMagisterski.Pages.DashboardsPage;
 import seleniumTestsProjektMagisterski.Pages.LoginPage;
-import seleniumTestsProjektMagisterski.Pages.SettingsPage;
 
-public class WhenUserAddsNewDashboards {
+public class WhenUserAddsNewMatches {
 
 	private WebDriver webdriver;
 	public String browser = "Chrome";
 	private LoginPage login = new LoginPage(webdriver);
 	private DashboardsPage dashboards = new DashboardsPage(webdriver);
-	private SettingsPage settings = new SettingsPage(webdriver);
-
-	String dashboardName = "Training";
+	
+	List<WebElement> matchesList;
+	String modus;
 	Select select;
-	int dashboardsNumb;
-	int newDashboardsNumb;
-	List<WebElement> dashboardsList;
-	WebElement dashboardGame;
-	WebElement dashboardCategory;
-	String selectedCategory;
-	String dateStr;
-	String selectedGame;
+	int matchesNumb;
+	int newMatchesNumb;
 	
 	@Before
 	public void openTheBrowser() {
@@ -63,41 +52,53 @@ public class WhenUserAddsNewDashboards {
 	}
 	
 	@Test
-	public void AddNewDashboardProperly() {
-		
+	public void addsNewMatchProperly() {
+		modus = "3";
+		matchesNumb = 0;
+		newMatchesNumb = 0;
+
 		try {
 			login.loginUser("admin", "admin");
-			dashboards.getNewDashboardButton().click();
-			dashboards.getNewDashboardNameField().sendKeys(dashboardName);
 	
 			Thread.sleep(500);
-			dashboardsNumb = dashboards.getDashboardsTable().size();
 			
-			select = new Select(dashboards.getNewGameDropdown);
-			//select.deselectAll();
-			select.selectByIndex(1);
-			selectedGame = select.getFirstSelectedOption().getText();
-			
-			select = new Select(dashboards.getNewCategoryDropdown);
-			//select.deselectAll();
-			select.selectByIndex(1);
-			selectedCategory = select.getFirstSelectedOption().getText();
-			dashboards.getSaveNewCategoryButton().click();
-	
-			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-			Date date = new Date();
-			dateStr = dateFormat.format(date);
-			
+			dashboards.getFirstRowInDashoardsTable().click();
+
 			Thread.sleep(500);
+			matchesList = dashboards.getMatchesTable();
+			Thread.sleep(500);
+			matchesNumb = matchesList.size();
+			
+			((JavascriptExecutor) webdriver).executeScript("arguments[0].scrollIntoView(true);", dashboards.getNewMatchButton());
+			Thread.sleep(500); 
+			dashboards.getNewMatchButton().click();
+			dashboards.newModusField.sendKeys(modus);
+			
+			select = new Select(dashboards.playerADropdown);
+			//select.deselectAll();
+			select.selectByIndex(1);
+			String selectedPlayerA = select.getFirstSelectedOption().getText();
+			
+			select = new Select(dashboards.playerBDropdown);
+			//select.deselectAll();
+			select.selectByIndex(2);
+			String selectedPlayerB = select.getFirstSelectedOption().getText();
+			
+			dashboards.getSaveNewMatchButton().click();
 			
 			webdriver.navigate().refresh();
-			dashboardsList = dashboards.getDashboardsTable();
+			dashboards.getFirstRowInDashoardsTable().click();
+			((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollHeight;", dashboards.getMatchesTable());
+
 			Thread.sleep(500);
-			newDashboardsNumb = dashboardsList.size();
+			matchesList = dashboards.getMatchesTable();
+			Thread.sleep(500);
+			newMatchesNumb = matchesList.size();
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		Assert.assertEquals(newDashboardsNumb, dashboardsNumb + 1);
+		Assert.assertEquals(newMatchesNumb, matchesNumb + 1);
 	}
 	
 	@After

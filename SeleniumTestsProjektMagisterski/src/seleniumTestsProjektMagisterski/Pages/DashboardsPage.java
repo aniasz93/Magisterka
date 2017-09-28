@@ -31,10 +31,6 @@ public class DashboardsPage {
 		return webdriver.findElement(By.cssSelector("input[ng-model='$dashboards.dashboardName']"));
 	}
 	
-//	public WebElement getNewGameDropdown() {
-//		return webdriver.findElement(By.cssSelector("select[ng-model='$dashboards.game']"));
-//	}
-	
 	@FindBy(id="gametype")
 	public WebElement getNewGameDropdown;
 	
@@ -69,5 +65,44 @@ public class DashboardsPage {
 	
 	public WebElement getFirstDashboard(List<WebElement> list) {
 		return list.get(0);
+	}
+	
+	public WebElement getFirstRowInDashoardsTable() {
+		return this.getDashboardsTable().get(0);//webdriver.findElement(By.cssSelector("div[ng-init='$dashboards.list()'] > table > tbody > tr[contains(text(),'Training'] > td[contains(text(),'Training]"));
+	}
+	
+	public WebElement getNewMatchButton() {
+		return webdriver.findElement(By.cssSelector("button[ng-click='$dashboards.addMatchPopover.open()']"));
+	}
+	
+	@FindBy(id="modus")
+	public WebElement newModusField;
+	
+	@FindBy(id="playerA")
+	public WebElement playerADropdown;
+	
+	@FindBy(id="playerB")
+	public WebElement playerBDropdown;
+	
+	public List<WebElement> getPlayerAListInDropdown() {
+		Select select = new Select(playerADropdown);
+		return select.getOptions();
+	}
+	
+	public List<WebElement> getPlayerBListInDropdown() {
+		Select select = new Select(playerBDropdown);
+		return select.getOptions();
+	}
+
+	public WebElement getSaveNewMatchButton() {
+		return webdriver.findElement(By.cssSelector("button[ng-click='$dashboards.createMatch(); $dashboards.addMatchPopover.close()']"));
+	}
+	
+	public WebElement getCloseNewMatchButton() {
+		return webdriver.findElement(By.cssSelector("button[ng-click='$dashboards.addMatchPopover.close()']"));
+	}
+
+	public List<WebElement> getMatchesTable() {
+		return webdriver.findElements(By.cssSelector("div[ng-show='$dashboards.showMatches'] > div > table > tbody > tr"));
 	}
 }

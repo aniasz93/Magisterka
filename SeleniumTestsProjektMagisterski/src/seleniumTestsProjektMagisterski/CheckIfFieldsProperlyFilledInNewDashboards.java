@@ -58,41 +58,48 @@ public class CheckIfFieldsProperlyFilledInNewDashboards {
 	@Test
 	public void gameDropdown() {
 		
-		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()").click();
-		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-		
-		gamesList = settings.getGamesTable();
-
-		gamesListFromSettings = settings.getGamesTable();
-		
-		settings.findTab("dashboards()").click();
-		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-		
-		dashboards.getNewDashboardButton().click();
-		gamesListInDashboards = dashboards.getGamesListInDropdown();
-		
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("settings()").click();
+			Thread.sleep(500);
+			
+			gamesList = settings.getGamesTable();
+	
+			gamesListFromSettings = settings.getGamesTable();
+			
+			settings.findTab("dashboards()").click();
+			Thread.sleep(500);
+			
+			dashboards.getNewDashboardButton().click();
+			gamesListInDashboards = dashboards.getGamesListInDropdown();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(gamesListInDashboards.containsAll(gamesListFromSettings));
 	}
 	
 	@Test
 	public void categoryDropdown() {
 
-		login.loginUser("admin", "admin");
-		dashboards.findTab("settings()").click();
-		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-		
-		categoriesList = settings.getCategoriesTable();
-
-		((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollIntoView();", settings.getSaveNewCategoryButton());
-		categoriesListFromSettings = settings.getCategoriesTable();
-		
-		settings.findTab("dashboards()").click();
-		webdriver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-		
-		dashboards.getNewDashboardButton().click();
-		categoriesListInDashboards = dashboards.getCategoriesListInDropdown();
-		
+		try {
+			login.loginUser("admin", "admin");
+			dashboards.findTab("settings()").click();
+			Thread.sleep(500);
+			
+			categoriesList = settings.getCategoriesTable();
+	
+			((JavascriptExecutor)webdriver).executeScript("arguments[0].scrollHeight;", settings.getCategoriesTable());
+			categoriesListFromSettings = settings.getCategoriesTable();
+			
+			settings.findTab("dashboards()").click();
+			Thread.sleep(500);
+			
+			dashboards.getNewDashboardButton().click();
+			categoriesListInDashboards = dashboards.getCategoriesListInDropdown();
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Assert.assertTrue(categoriesListInDashboards.containsAll(categoriesListFromSettings));
 	}
 	
