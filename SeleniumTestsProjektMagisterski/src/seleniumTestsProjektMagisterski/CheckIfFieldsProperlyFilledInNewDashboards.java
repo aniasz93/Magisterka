@@ -39,13 +39,13 @@ public class CheckIfFieldsProperlyFilledInNewDashboards {
 		System.out.println("Browser:" + browser);
 		
 		if(browser.equalsIgnoreCase("IE")){
-			System.setProperty("webdriver.ie.driver", "D:\\Uczelnia\\UAM\\Magisterka\\Projekt magisterski\\IEDriverServer_x64_3.0.0\\IEDriverServer.exe");
+			System.setProperty("webdriver.ie.driver", "IEDriverServer_x64_3.0.0\\IEDriverServer.exe");
 			webdriver = new InternetExplorerDriver();
 		} else if(browser.equalsIgnoreCase("Chrome")){
-			System.setProperty("webdriver.chrome.driver", "D:\\Uczelnia\\UAM\\Magisterka\\Projekt magisterski\\chromedriver_win32\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "chromedriver_win32\\chromedriver.exe");
 			webdriver = new ChromeDriver();
 		} else if(browser.equalsIgnoreCase("firefox")){
-			System.setProperty("webdriver.gecko.driver", "D:\\Uczelnia\\UAM\\Magisterka\\Projekt magisterski\\geckodriver-v0.19.0-win64\\geckodriver.exe");
+			System.setProperty("webdriver.gecko.driver", "geckodriver-v0.19.0-win64\\geckodriver.exe");
 			webdriver = new FirefoxDriver();
 		}
 		
